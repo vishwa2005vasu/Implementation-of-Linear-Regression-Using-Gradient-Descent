@@ -8,92 +8,180 @@ To write a program to predict the profit of a city using the linear regression m
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. Upload the file to your compiler.
-2. Type the required program.
-3. Print the program.
-4. End the program.
+1. Startv the program.
+2.import numpy as np.
+3.Give the header to the data.
+4.Find the profit of population.
+5.Plot the required graph for both for Gradient Descent Graph and Prediction Graph.
+6.End the program.
+ 
 
 ## Program:
 ```
-/*
-Program to implement the linear regression using gradient descent.
-Developed by: Vishwa vasu. R
-RegisterNumber:212222040183
-*/
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+data=pd.read_csv("/content/ex1.txt",header=None)
 
-data=pd.read_csv("/content/ex1 (2).txt", header=None)
-
-plt.scatter(data[0],data[1])
+plt.scatter(data[0],data[1],color="cadetblue")
 plt.xticks(np.arange(5,30,step=5))
 plt.yticks(np.arange(-5,30,step=5))
-plt.xlabel("Popuation of city (10,000s)")
-plt.ylabel("Profit ($10,000)")
+plt.xlabel("Population of city (10,000s)")
+plt.ylabel("Profit ($10,000) ")
 plt.title("Profit Prediction")
 
-def computeCost(X,y,theta):
-  m=len(y)
-  h=X.dot(theta)
+def computeCost(x,y,theta):
+  """
+  take in a numpy array X,y theta and generate the cost function of using the
+  in a linear regression model
+  """
+  m=len(y) #length of the training data
+  h=x.dot(theta) #hypothesis
   square_err=(h-y)**2
-  return 1/(2*m)*np.sum(square_err)
+  return 1/(2*m)*np.sum(square_err) #returning ]
 
 data_n=data.values
 m=data_n[:,0].size
-X=np.append(np.ones((m,1)),data_n[:,0].reshape(m,1),axis=1)
+x=np.append(np.ones((m,1)),data_n[:,0].reshape(m,1),axis=1)
 y=data_n[:,1].reshape(m,1)
 theta=np.zeros((2,1))
+computeCost(x,y,theta) #call the function
 
-computeCost(X,y,theta)
-
-def gradientDescent(X,y,theta,alpha,num_iters):
+def gradientDescent(x,y,theta,alpha,num_iters):
   m=len(y)
-  J_history=[]
+  j_history=[]
   for i in range(num_iters):
-    predictions=X.dot(theta)
-    error=np.dot(X.transpose(),(predictions-y))
+    predictions = x.dot(theta)
+    error = np.dot(x.transpose(),(predictions-y))
     descent=alpha*1/m*error
     theta-=descent
-    J_history.append(computeCost(X,y,theta))
-  return theta,J_history
+    j_history.append(computeCost(x,y,theta))
+  return theta,j_history
 
-theta,J_history = gradientDescent(X,y,theta,0.01,1500)
-print("h(x)="+str(round(theta[0,0],2))+"+"+str(round(theta[1,0],2))+"x1")
+theta,j_history = gradientDescent(x,y,theta,0.01,1500)
+print("h(x) ="+str(round(theta[0,0],2))+" + "+str(round(theta[1,0],2))+"x1")
 
-plt.plot(J_history)
+plt.plot(j_history)
 plt.xlabel("Iteration")
 plt.ylabel("$J(\Theta)$")
 plt.title("Cost function using Gradient Descent")
 
-plt.scatter(data[0],data[1])
+plt.scatter(data[0],data[1],color="cadetblue")
 x_value=[x for x in range(25)]
-y_value=[y*theta[1]+theta[0]for y in x_value]
-plt.plot(x_value,y_value,color="purple")
+y_value=[y*theta[1]+theta[0] for y in x_value]
+plt.plot(x_value,y_value)
 plt.xticks(np.arange(5,30,step=5))
 plt.yticks(np.arange(-5,30,step=5))
-plt.xlabel("Population of City (10,000s)")
+plt.xlabel("Population of City(10,000s)")
 plt.ylabel("Profit($10,000)")
 plt.title("Profit Prediction")
 
 def predict(x,theta):
-    predictions = np.dot(theta.transpose(),x)
-    return predictions[0]
+  predictions=np.dot(theta.transpose(),x)
+  return predictions[0]
+
 predict1=predict(np.array([1,3.5]),theta)*10000
-print("For population = 35,000 , we predict a profit of $"+str(round(predict1,0)))
+print("For population = 35,000,we predict a profit of $"+str(round(predict1,0)))
 
 predict2=predict(np.array([1,7]),theta)*10000
-print("For population = 70,000 , we predict a profit of $"+str(round(predict2,0)))
+print("For population = 70,000,we predict a profit of $" +str(round(predict2,0)))
+
 ```
 
 ## Output:
-![ex 3 1](https://github.com/vishwa2005vasu/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135954202/04262d12-3d0e-4cc4-bf55-a63769c4c2c6)
-![ex 3 2](https://github.com/vishwa2005vasu/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135954202/1d2c5b3c-6fa8-41ce-9a61-c0143382463a)
-![ex 3 3](https://github.com/vishwa2005vasu/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135954202/d25efe95-f0c7-4207-89b7-8b2fc7efc0b8)
-![ex 3 4](https://github.com/vishwa2005vasu/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135954202/66f43599-e618-4723-9025-04d5ed6accce)
-![ex 3 5](https://github.com/vishwa2005vasu/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135954202/5a0920d1-4170-43ea-bf6a-0d24ed0944eb)
-![ex 3 6](https://github.com/vishwa2005vasu/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135954202/6c63fce9-a2e1-4d4f-b9f6-14f3a938f7f0)
-![ex 3 7](https://github.com/vishwa2005vasu/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135954202/7a63489d-be03-48f8-9193-2356f643059c)
+1.profit prediction
+
+
+
+
+
+![Screenshot (41)](https://github.com/MaheshMuthuL/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135570619/ff4fe207-f99a-41ba-87f8-ec4ff2f1507d)
+
+
+
+
+
+
+
+ 2.function output
+
+
+
+
+ 
+
+![Screenshot (42)](https://github.com/MaheshMuthuL/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135570619/e5e029bb-42f2-44d9-88b0-a6a46d3ff2f5)
+
+
+
+
+
+ 3.Gradient Descent
+
+
+
+ 
+
+![Screenshot (43)](https://github.com/MaheshMuthuL/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135570619/38ac6814-ffe7-49e8-a598-cefb4bc698ce)
+
+
+
+
+
+ 4.Cost function using gradient descent
+
+
+ 
+
+
+![Screenshot (44)](https://github.com/MaheshMuthuL/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135570619/000fb802-7a8b-4764-bd30-fc226c076cbf)
+
+
+
+
+
+5.Linear regression using profit prediction
+
+
+
+
+
+
+![Screenshot (45)](https://github.com/MaheshMuthuL/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135570619/355e9399-53dc-4330-b4b7-3b830fa1c3f6)
+
+
+
+
+ 6.Profit prediction for a population of 35,000
+
+
+
+
+
+
+![Screenshot (78)](https://github.com/MaheshMuthuL/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135570619/1de9c869-b806-4121-9a94-f6daf241093c)
+
+
+
+
+
+
+ 7.Profit prediction for a population of 70,000
+
+
+
+
+ 
+ 
+ 
+ ![Screenshot (77)](https://github.com/MaheshMuthuL/Implementation-of-Linear-Regression-Using-Gradient-Descent/assets/135570619/c9780ad2-59ca-40b4-a304-a09f314aff81)
+
+
+
+
+
+
+
 
 
 ## Result:
